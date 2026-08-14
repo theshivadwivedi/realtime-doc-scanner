@@ -6,12 +6,11 @@ from datetime import datetime
 OUTPUT_DIR = "output"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-SCORE_THRESHOLD = 15       # minimum shape/position score to consider a candidate
-MIN_AREA_RATIO = 0.15      # candidate must cover at least 15% of the frame
-MIN_EXTENT = 0.75          # contour area / bounding-box area -- rejects skewed/non-rectangular quads
-MIN_BRIGHTNESS = 120       # warped region must be reasonably bright (paper, not a dark object)
-MAX_SATURATION = 70        # warped region must be low-color (white/off-white paper, not a screen/book cover)
-
+SCORE_THRESHOLD = 15       
+MIN_AREA_RATIO = 0.15      
+MIN_EXTENT = 0.75          
+MIN_BRIGHTNESS = 120       
+MAX_SATURATION = 70        
 
 def preprocess_image(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -88,7 +87,7 @@ def find_best_document(contours, image_center, frame_area):
 
         area = cv2.contourArea(contour)
 
-        # reject anything too small to plausibly be a document in frame
+   
         if area < MIN_AREA_RATIO * frame_area:
             continue
 
@@ -101,8 +100,7 @@ def find_best_document(contours, image_center, frame_area):
         if not cv2.isContourConvex(approx):
             continue
 
-        # extent check: rejects skewed/non-rectangular quads that happen to
-        # have 4 points but don't actually fill their bounding box like paper does
+
         bx, by, bw, bh = cv2.boundingRect(approx)
         extent = area / float(bw * bh)
         if extent < MIN_EXTENT:
@@ -277,7 +275,7 @@ while True:
                 print(f"Document confirmed (score={best_score:.1f}). Saved to {filename}")
 
                 cv2.imshow("Scanned Document", scanned)
-                cv2.waitKey(1500)  # briefly show the result before closing
+                cv2.waitKey(1500)  
 
                 saved = True
                 break
